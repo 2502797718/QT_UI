@@ -14,6 +14,7 @@
 #include <QNetworkInterface>
 #include <QTimer>
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -39,10 +40,8 @@ public:
     QTcpSocket *Socket_client;
     QList<QHostAddress> IPlist;
     QTimer *p_timer;
+    QTimer *mqtt_timer;
 private slots:
-
-
-    void on_pushButton_3_clicked(bool checked);
 
     void on_pushButton_5_clicked(bool checked);
 
@@ -64,6 +63,7 @@ private slots:
     void socket_error(QAbstractSocket::SocketError err1);
 
     void timer_timeout();
+    void mqtt_timer_timeout();
 private:
 
 };

@@ -1,4 +1,4 @@
-QT       += core gui serialport network
+QT       += core gui serialport network serialbus
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -38,3 +38,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     wifi1.qrc
+
+DISTFILES +=

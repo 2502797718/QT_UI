@@ -7,10 +7,14 @@
 #include <QDebug>
 #include <QIODevice>
 #include <QApplication>
-
+#include <QRegularExpression>
+#include <QProcess>
 
 MainWindow *P_main;
 
+QList<int> list_led_state;
+int mqtt_ipc_connected = 0;
+bool checkWlan0Status();
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,8 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     P_main = this;
     ui->setupUi(this);
 
+    list_led_state << 0 << 0 << 0;
 
     myuart = new QSerialPort(this);
+
     my_kb = new keyboard(this);
     my_kb->setGeometry(400,130,290,140);
     my_kb->hide();
@@ -49,6 +55,15 @@ MainWindow::MainWindow(QWidget *parent)
             &MainWindow::socket_error);
     p_timer = new QTimer(this);
     connect(p_timer, &QTimer::timeout, this, &MainWindow::timer_timeout);
+    mqtt_timer = new QTimer(this);
+    connect(mqtt_timer, &QTimer::timeout, this, &MainWindow::mqtt_timer_timeout);
+    mqtt_timer->start(5000);
+
+    //ui->led_wifi->setPixmap(QPixmap(QString::fromUtf8(":/../resource/WIFI_connnect.png")));
+    QPixmap c = QPixmap(QString::fromUtf8(":/resource/WIFI_disconnnect.png"));
+    ui->led1->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_on.png")));
+    ui->led_wifi->setPixmap(c);
+
 }
 
 MainWindow::~MainWindow()
@@ -58,21 +73,25 @@ MainWindow::~MainWindow()
 
 
 
-void MainWindow::on_pushButton_3_clicked(bool checked)
-{
-    if(checked == true)
-    {
-        ui->led1->setEnabled(true);
-        ui->led1_2->setEnabled(true);
-        ui->led1_3->setEnabled(true);
-    }
-    else
-    {
-        ui->led1->setEnabled(false);
-        ui->led1_2->setEnabled(false);
-        ui->led1_3->setEnabled(false);
+
+
+bool checkWlan0Status() {
+    QProcess process;
+    process.start("ifconfig wlan0");
+    process.waitForFinished();
+
+    QByteArray output = process.readAllStandardOutput();
+    if (output.contains("inet")) {
+        // 网卡正常工作
+        qDebug() << "wlan0 is up";
+        return true;
+    } else {
+        // 网卡没有正常工作
+        qDebug() << "wlan0 is down";
+        return false;
     }
 }
+
 
 void MainWindow::on_pushButton_5_clicked(bool checked)
 {
@@ -98,6 +117,7 @@ void MainWindow::on_pushButton_mqtt_clicked(bool checked)
     {
         Socket_client->abort();
         p_timer->stop();
+        mqtt_timer->stop();
         ui->label_mqtt->setPixmap(QPixmap(QString::fromUtf8(":/resource/status_off.png")));
     }
 }
@@ -178,7 +198,7 @@ void MainWindow::on_pushButton_clicked()
         ui->textBrowser->append(str_head);
         myuart->write(buf_uart_send);
     }
-    else
+    else if(ui->comboBox_send->currentText() == "MQTT")
     {
         QString str_head = "MQTT SEND: ";
         buf_uart_send = ui->lineEdit->text().toUtf8();
@@ -186,6 +206,10 @@ void MainWindow::on_pushButton_clicked()
         ui->textBrowser->append(str_head);
         /*MQTT SEND*/
         Socket_client->write(buf_uart_send);
+    }
+    else
+    {
+        //CMD CONFIG
     }
 }
 
@@ -214,6 +238,7 @@ void MainWindow::on_pushButton_4_clicked()
     QApplication::quit();
 }
 
+
 void MainWindow::uart_ready_read()
 {
     QString str_head = "UART REC: ";
@@ -222,16 +247,70 @@ void MainWindow::uart_ready_read()
     /*
      * prase code
     */
+    QRegularExpression regex("led(\\d+):(on|off)");
+    QRegularExpressionMatch match = regex.match(QString::fromUtf8(buf_uart_rec));
+
+    if (match.hasMatch()) {
+        if(mqtt_ipc_connected == 1) Socket_client->write(buf_uart_rec);
+
+        int device = match.captured(1).toInt();  // 设备号
+        QString status = match.captured(2);  // 状态 (on/off)
+        switch (device) {
+        case 0:
+               if(status == "on")
+               {
+                   list_led_state[0] = 1;
+                   ui->led1->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_on.png")));
+               }
+               else
+               {
+                   list_led_state[0] = 0;
+                   ui->led1->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_off.png")));
+               }
+            break;
+        case 1:
+            if(status == "on")
+            {
+                list_led_state[1] = 1;
+                ui->led1_2->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_on.png")));
+            }
+            else
+            {
+                list_led_state[1] = 0;
+                ui->led1_2->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_off.png")));
+            }
+         break;
+        case 2:
+            if(status == "on")
+            {
+                list_led_state[2] = 1;
+                ui->led1_3->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_on.png")));
+            }
+            else
+            {
+                list_led_state[2] = 0;
+                ui->led1_3->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_off.png")));
+            }
+         break;
+        default:
+            break;
+        }
+        qDebug() << "设备号:" << device << ", 状态:" << status;
+    } else {
+        qDebug() << "无法解析数据:" << QString::fromUtf8(buf_uart_rec);
+    }
 }
 
 void MainWindow::socket_connected()
 {
-    p_timer->stop();
+    p_timer->stop();    
+    mqtt_ipc_connected = 1;
 }
 
 void MainWindow::socket_disconnected()
 {
 /**/
+    mqtt_ipc_connected = 0;
 }
 
 void MainWindow::socket_readready()
@@ -251,9 +330,21 @@ void MainWindow::socket_error(QAbstractSocket::SocketError err1)
     Socket_client->abort();
     ui->textBrowser->append("DEBUG: Socket connect failed retrying ...");
     p_timer->start(5000);
+    mqtt_timer->stop();
+    mqtt_ipc_connected = 0;
 }
 
 void MainWindow::timer_timeout()
 {
     Socket_client->connectToHost(IPlist[0],8888);
+}
+
+void MainWindow::mqtt_timer_timeout()
+{
+    if(checkWlan0Status() == true)
+    {
+        mqtt_timer->stop();
+        ui->pushButton_mqtt->setEnabled(true);
+        ui->led_wifi->setPixmap(QPixmap(QString::fromUtf8(":/resource/WIFI_connect.png")));
+    }
 }

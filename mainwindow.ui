@@ -28,135 +28,76 @@
       <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,5,1,1">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="leftMargin">
+          <number>60</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton { background: none; border: none; }</string>
+          <widget class="QLabel" name="led_wifi">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string/>
            </property>
-           <property name="icon">
-            <iconset resource="wifi1.qrc">
-             <normaloff>:/resource/WIFI_disconnect.png</normaloff>
-             <normalon>:/resource/WIFI_connnect.png</normalon>:/resource/WIFI_disconnect.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
+           <property name="pixmap">
+            <pixmap resource="wifi1.qrc">:/resource/WIFI_disconnect.png</pixmap>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="led1">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton { background: none; border: none; }</string>
+          <widget class="QLabel" name="led1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string/>
            </property>
-           <property name="icon">
-            <iconset resource="wifi1.qrc">
-             <normaloff>:/resource/led_off.png</normaloff>
-             <normalon>:/resource/led_on.png</normalon>:/resource/led_off.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
+           <property name="pixmap">
+            <pixmap resource="wifi1.qrc">:/resource/led_off.png</pixmap>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="led1_2">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton { background: none; border: none; }</string>
+          <widget class="QLabel" name="led1_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string/>
            </property>
-           <property name="icon">
-            <iconset resource="wifi1.qrc">
-             <normaloff>:/resource/led_off.png</normaloff>
-             <normalon>:/resource/led_on.png</normalon>:/resource/led_off.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
+           <property name="pixmap">
+            <pixmap resource="wifi1.qrc">:/resource/led_off.png</pixmap>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="led1_3">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QPushButton { background: none; border: none; }</string>
+          <widget class="QLabel" name="led1_3">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
            <property name="text">
             <string/>
            </property>
-           <property name="icon">
-            <iconset resource="wifi1.qrc">
-             <normaloff>:/resource/led_off.png</normaloff>
-             <normalon>:/resource/led_on.png</normalon>:/resource/led_off.png</iconset>
-           </property>
-           <property name="iconSize">
-            <size>
-             <width>64</width>
-             <height>64</height>
-            </size>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
+           <property name="pixmap">
+            <pixmap resource="wifi1.qrc">:/resource/led_off.png</pixmap>
            </property>
           </widget>
          </item>
@@ -201,6 +142,9 @@
          </item>
          <item>
           <widget class="QLabel" name="label_net">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -437,6 +381,9 @@ p, li { white-space: pre-wrap; }
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
           <widget class="QPushButton" name="pushButton_mqtt">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">font: 14pt &quot;Sans Serif&quot;;</string>
            </property>
