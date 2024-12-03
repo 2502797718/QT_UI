@@ -13,7 +13,7 @@
 #include <QTcpSocket>
 #include <QNetworkInterface>
 #include <QTimer>
-
+#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,6 +39,7 @@ public:
 
     QTcpSocket *Socket_client;
     QList<QHostAddress> IPlist;
+
     QTimer *p_timer;
     QTimer *mqtt_timer;
 private slots:
@@ -64,6 +65,7 @@ private slots:
 
     void timer_timeout();
     void mqtt_timer_timeout();
+
 private:
 
 };

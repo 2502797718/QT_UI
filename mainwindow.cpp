@@ -8,7 +8,7 @@
 #include <QIODevice>
 #include <QApplication>
 #include <QRegularExpression>
-#include <QProcess>
+
 
 MainWindow *P_main;
 
@@ -60,10 +60,8 @@ MainWindow::MainWindow(QWidget *parent)
     mqtt_timer->start(5000);
 
     //ui->led_wifi->setPixmap(QPixmap(QString::fromUtf8(":/../resource/WIFI_connnect.png")));
-    QPixmap c = QPixmap(QString::fromUtf8(":/resource/WIFI_disconnnect.png"));
-    ui->led1->setPixmap(QPixmap(QString::fromUtf8(":/resource/led_on.png")));
-    ui->led_wifi->setPixmap(c);
 
+    ui->led_wifi->setPixmap(QPixmap(QString::fromUtf8(":/resource/WIFI_disconnect.png")));
 }
 
 MainWindow::~MainWindow()
@@ -251,7 +249,7 @@ void MainWindow::uart_ready_read()
     QRegularExpressionMatch match = regex.match(QString::fromUtf8(buf_uart_rec));
 
     if (match.hasMatch()) {
-        if(mqtt_ipc_connected == 1) Socket_client->write(buf_uart_rec);
+        if(mqtt_ipc_connected == 1) Socket_client->write(buf_uart_rec);  //zhuan fa mqtt
 
         int device = match.captured(1).toInt();  // 设备号
         QString status = match.captured(2);  // 状态 (on/off)
@@ -341,10 +339,14 @@ void MainWindow::timer_timeout()
 
 void MainWindow::mqtt_timer_timeout()
 {
-    if(checkWlan0Status() == true)
+    if(checkWlan0Status() == false)
     {
         mqtt_timer->stop();
         ui->pushButton_mqtt->setEnabled(true);
-        ui->led_wifi->setPixmap(QPixmap(QString::fromUtf8(":/resource/WIFI_connect.png")));
+        ui->led_wifi->setPixmap(QPixmap(QString::fromUtf8(":/resource/WIFI_connnect.png")));
     }
 }
+
+
+
+

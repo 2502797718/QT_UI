@@ -1,10 +1,13 @@
 <RCC>
     <qresource prefix="/">
-        <file>../resource/led_off.png</file>
-        <file>../resource/led_on.png</file>
-        <file>../resource/status_off.png</file>
-        <file>../resource/status_on.png</file>
-        <file>../resource/WIFI_connnect.png</file>
-        <file>../resource/WIFI_disconnect.png</file>
+        <file>test-process-1-demo</file>
+    </qresource>
+    <qresource prefix="/resource">
+        <file>led_on.png</file>
+        <file>led_off.png</file>
+        <file>status_off.png</file>
+        <file>status_on.png</file>
+        <file>WIFI_connnect.png</file>
+        <file>WIFI_disconnect.png</file>
     </qresource>
 </RCC>
